@@ -38,6 +38,12 @@ router.delete(
 
 router.post("/tasks", TaskController.createTask);
 
+router.get(
+  "/tasks/:goalId",
+  passport.authenticate("jwt", { session: false }),
+  TaskController.getTaskByGoalId
+);
+
 router.put(
   "/tasks/:taskId",
   passport.authenticate("jwt", { session: false }),

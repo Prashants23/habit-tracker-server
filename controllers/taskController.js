@@ -52,6 +52,17 @@ exports.updateTask = (req, res) => {
       .json({ error: "Failed to update the Task: Body can not be empty" });
   }
 };
+// Get Tasks
+exports.getTaskByGoalId = async (req, res) => {
+  try {
+    const { goalId } = req.params;
+    const task = await Goal.find({ goalId });
+    res.json(task);
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+    res.status(500).json({ error: "Failed to fetch task" });
+  }
+};
 
 // Delete a task
 exports.deleteTask = (req, res) => {
