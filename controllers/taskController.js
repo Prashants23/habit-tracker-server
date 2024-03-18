@@ -1,6 +1,8 @@
 // controllers/taskController.js
 const Task = require("../models/Task");
 
+const LogController = require("./logController");
+
 // @desc  Create a new task
 exports.createTask = (req, res) => {
   try {
@@ -25,13 +27,13 @@ exports.createTask = (req, res) => {
     newTask
       .save()
       .then((task) => {
-        LogController.logActivity(
-          req.user.id, // Assuming user ID is stored in req.user
-          goal._id,
-          "Goal",
-          "delete"
-        );
-        return res.json(task);
+        // LogController.logActivity(
+        //   req.user.id, // Assuming user ID is stored in req.user
+        //   goalId,
+        //   "Task",
+        //   "create"
+        // );
+        res.json(task);
       })
       .catch((err) =>
         res.status(500).json({ error: "Failed to create task", err })
@@ -63,7 +65,7 @@ exports.updateTask = (req, res) => {
         }
         LogController.logActivity(
           req.user.id, // Assuming user ID is stored in req.user
-          goal._id,
+          taskId,
           "Task",
           "update"
         );
@@ -110,8 +112,8 @@ exports.deleteTask = (req, res) => {
           .then(() => {
             LogController.logActivity(
               req.user.id, // Assuming user ID is stored in req.user
-              goal._id,
-              "Goal",
+              taskId,
+              "Task",
               "delete"
             );
             res.json({ message: "Task deleted successfully" });

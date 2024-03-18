@@ -9,6 +9,6 @@ const userDataRoutes = require("./userDataRoutes");
 router.use("/auth", authRoutes);
 router.use("/goals", goalRoutes);
 router.use("/tasks", taskRoutes);
-router.use("/user", userDataRoutes);
+router.use("/", userDataRoutes);
 
 module.exports = router;
