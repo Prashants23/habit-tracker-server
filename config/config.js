@@ -1,7 +1,5 @@
 // config/config.js
 
-// psw: 9gSZql7JgVagLbGx
-
 module.exports = {
   mongoURI:
     "mongodb+srv://prashant23shukla:9gSZql7JgVagLbGx@cluster0.25nt4hw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",

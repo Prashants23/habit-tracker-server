@@ -1,23 +1,44 @@
 // controllers/taskController.js
 const Task = require("../models/Task");
 
-// @desc    Create a new task
+// @desc  Create a new task
 exports.createTask = (req, res) => {
-  const { goalId, taskName, quantity, frequency, customReminder, reminders } =
-    req.body;
-  const newTask = new Task({
-    goalId,
-    taskName,
-    quantity,
-    frequency,
-    reminders,
-    customReminder,
-    reminderTime,
-  });
-  newTask
-    .save()
-    .then((task) => res.json(task))
-    .catch((err) => console.log(err));
+  try {
+    const {
+      goalId,
+      taskName,
+      quantity,
+      frequency,
+      customReminder,
+      reminders,
+      reminderTime,
+    } = req.body;
+    const newTask = new Task({
+      goalId,
+      taskName,
+      quantity,
+      frequency,
+      reminders,
+      customReminder,
+      reminderTime,
+    });
+    newTask
+      .save()
+      .then((task) => {
+        LogController.logActivity(
+          req.user.id, // Assuming user ID is stored in req.user
+          goal._id,
+          "Goal",
+          "delete"
+        );
+        return res.json(task);
+      })
+      .catch((err) =>
+        res.status(500).json({ error: "Failed to create task", err })
+      );
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create task", err });
+  }
 };
 
 // controllers/taskController.js
@@ -26,7 +47,6 @@ exports.createTask = (req, res) => {
 exports.updateTask = (req, res) => {
   const { taskId } = req.params;
 
-  console.log("🚀 ~ req.body:", req.body);
   try {
     // Check if the task exists
 
@@ -41,6 +61,12 @@ exports.updateTask = (req, res) => {
             .status(404)
             .json({ error: "Task not found or no changes made" });
         }
+        LogController.logActivity(
+          req.user.id, // Assuming user ID is stored in req.user
+          goal._id,
+          "Task",
+          "update"
+        );
         res.json({ message: "Task updated successfully" });
       })
       .catch((err) =>
@@ -56,7 +82,10 @@ exports.updateTask = (req, res) => {
 exports.getTaskByGoalId = async (req, res) => {
   try {
     const { goalId } = req.params;
-    const task = await Goal.find({ goalId });
+    console.log("🚀 ~ exports.getTaskByGoalId= ~ goalId:", goalId);
+
+    const task = await Task.find({ goalId });
+    console.log("🚀 ~ exports.getTaskByGoalId= ~ task:", task);
     res.json(task);
   } catch (error) {
     console.log("🚀 ~ error:", error);
@@ -78,7 +107,15 @@ exports.deleteTask = (req, res) => {
 
         // Delete the task
         Task.deleteOne({ _id: taskId })
-          .then(() => res.json({ message: "Task deleted successfully" }))
+          .then(() => {
+            LogController.logActivity(
+              req.user.id, // Assuming user ID is stored in req.user
+              goal._id,
+              "Goal",
+              "delete"
+            );
+            res.json({ message: "Task deleted successfully" });
+          })
           .catch((err) => {
             console.error("Error deleting Task:", err);
             res.status(500).json({ error: "Failed to delete Task" });

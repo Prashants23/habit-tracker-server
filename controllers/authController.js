@@ -3,14 +3,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/config");
 
-// Load User model
 const User = require("../models/User");
 
-// @route   POST api/users/signup
 // @desc    Register user
-// @access  Public
 exports.signup = (req, res) => {
   const { username, email, password } = req.body;
+  console.log("🚀 ~ username:", username);
+
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: "All fields are mandatory" });
+  }
 
   // Check if user already exists
   User.findOne({ email }).then((user) => {
@@ -22,7 +24,6 @@ exports.signup = (req, res) => {
         email,
         password,
       });
-
       // Hash password before saving in database
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -40,13 +41,12 @@ exports.signup = (req, res) => {
 
 // @route   POST api/users/login
 // @desc    Login user and return JWT token
-// @access  Public
+
 exports.login = (req, res) => {
   const { email, password } = req.body;
+  console.log("🚀 ~ email:", email);
 
-  // Find user by email
   User.findOne({ email }).then((user) => {
-    // Check if user exists
     if (!user) {
       return res.status(404).json({ emailnotfound: "Email not found" });
     }

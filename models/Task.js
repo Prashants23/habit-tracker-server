@@ -22,7 +22,7 @@ const TaskSchema = new Schema({
   },
   frequency: {
     type: String,
-    enum: ["daily", "weekly", "custom"],
+    // enum: ,
     required: true,
   },
   customFrequency: {
@@ -33,12 +33,9 @@ const TaskSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  logs: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Log",
-    },
-  ],
+  reminderTime: {
+    type: Date,
+  },
 });
 
 module.exports = Task = mongoose.model("Task", TaskSchema);

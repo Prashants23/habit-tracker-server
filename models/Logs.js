@@ -10,21 +10,24 @@ const LogSchema = new Schema({
   },
   typeId: {
     type: String,
-  },
-  type: {
-    type: "Goal" | "Task",
     required: true,
   },
+  type: {
+    type: String, // Corrected type definition
+    enum: ["Goal", "Task"], // Define allowed values as an enum
+    required: true,
+  },
+
   action: {
     type: String,
     required: true,
   },
-  previousState: {
-    type: mongoose.Schema.Types.Mixed,
-  },
-  nextState: {
-    type: mongoose.Schema.Types.Mixed,
-  },
+  // previousState: {
+  //   type: mongoose.Schema.Types.Mixed,
+  // },
+  // nextState: {
+  //   type: mongoose.Schema.Types.Mixed,
+  // },
   timestamp: {
     type: Date,
     default: Date.now,

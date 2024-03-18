@@ -13,16 +13,19 @@ const GoalSchema = new Schema({
     required: true,
   },
   minTimeline: {
-    type: Number,
+    type: Date,
     required: true,
   },
   maxTimeline: {
-    type: Number,
+    type: Date,
     required: true,
   },
   completed: {
     type: Boolean,
     default: false,
+  },
+  completedPercentage: {
+    type: String,
   },
 });
 
